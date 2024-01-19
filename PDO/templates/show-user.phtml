@@ -1,0 +1,33 @@
+<?php 
+// Récupérer l'id de l'utilisateur 
+if(isset($_GET["id"]) && is_numeric($_GET["id"]))
+{
+    $userID = $_GET["id"];
+}
+
+// Requête SQL pour récupérer les informations de l'utilisateur dans la base de donnée
+$query = $db->prepare("SELECT * FROM users WHERE id = :id");
+$parameters = [
+     "id" =>  $userID
+    ];
+$query->execute($parameters);
+$user = $query->fetch(PDO::FETCH_ASSOC);
+
+// vérifier si l'utilisateur existe
+if($user) 
+{
+?>
+
+<main class="container py-5 text-center">
+    <h1><?= $user["first_name"]." ".$user["last_name"]; ?></h1>
+    <h2><?= $user["email"]; ?></h2>
+</main>
+<?php 
+    
+} else {
+    echo " ?>
+    <p>L'utilisateur n'existe pas</p>
+    <?php
+    ";
+}
+?>
